@@ -1,6 +1,7 @@
 // Self-contained extension surface. Sized for a Chrome/Edge popup (400×600) or side panel.
 import { useState } from "react";
 import { demoSite, findings, stickyNotes, type Finding } from "./demo-data";
+import { riskBand } from "./risk";
 import { Logo, SeverityTag } from "./parts";
 import { cn } from "@/lib/utils";
 
@@ -10,7 +11,8 @@ export function ExtensionPopup({ mode = "popup" }: { mode?: ExtensionMode }) {
   const [open, setOpen] = useState<Finding | null>(null);
   const [tab, setTab] = useState<"findings" | "notes">("findings");
   const score = demoSite.riskScore;
-  const r = 30;
+  const band = riskBand(score);
+  const r = 44;
   const c = 2 * Math.PI * r;
   const high = findings.filter((f) => f.severity === "High").length;
 
@@ -33,23 +35,23 @@ export function ExtensionPopup({ mode = "popup" }: { mode?: ExtensionMode }) {
       <div className="canvas-dots flex-1 overflow-y-auto px-4 pb-4 pt-3">
         {/* Site */}
         <div className="flex items-center gap-2 text-xs">
-          <span className="h-2 w-2 rounded-full bg-severity-medium" />
+          <span className={cn("h-2 w-2 rounded-full", band.dot)} />
           <span className="font-mono">{demoSite.domain}</span>
           <span className="ml-auto text-muted-foreground">{demoSite.updated}</span>
         </div>
 
         {/* Score */}
         <div className="mt-3 flex items-center gap-4 rounded-2xl bg-charcoal p-4 text-charcoal-foreground">
-          <div className="relative h-[72px] w-[72px] shrink-0">
-            <svg viewBox="0 0 72 72" className="h-full w-full -rotate-90">
-              <circle cx="36" cy="36" r={r} className="fill-none stroke-charcoal-foreground/15" strokeWidth="7" />
-              <circle cx="36" cy="36" r={r} className="fill-none stroke-lime" strokeWidth="7" strokeLinecap="round"
+          <div className="relative h-[116px] w-[116px] shrink-0">
+            <svg viewBox="0 0 116 116" className="h-full w-full -rotate-90">
+              <circle cx="58" cy="58" r={r} className="fill-none stroke-charcoal-foreground/15" strokeWidth="10" />
+              <circle cx="58" cy="58" r={r} className={cn("fill-none", band.stroke)} strokeWidth="10" strokeLinecap="round"
                 strokeDasharray={c} strokeDashoffset={c * (1 - score / 100)} />
             </svg>
-            <div className="absolute inset-0 grid place-items-center font-serif text-2xl">{score}</div>
+            <div className="absolute inset-0 grid place-items-center font-serif text-5xl leading-none">{score}</div>
           </div>
           <div className="min-w-0">
-            <div className="font-mono text-[10px] uppercase tracking-wider text-charcoal-foreground/60">Potential risk · Elevated</div>
+            <div className="font-mono text-[10px] uppercase tracking-wider text-charcoal-foreground/60">Potential risk · {band.name}</div>
             <p className="mt-1 text-sm leading-snug">
               {findings.length} clauses flagged, {high} high. {demoSite.documents.join(" + ")}.
             </p>
