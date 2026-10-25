@@ -19,7 +19,7 @@ const sevDot: Record<Severity, string> = {
   Low: "bg-severity-low",
 };
 
-export function SeverityTag({ severity, dark }: { severity: Severity; dark?: boolean }) {
+export function SeverityTag({ severity, dark }: { severity: Severity; dark?: boolean | undefined }) {
   return (
     <span
       className={cn(
@@ -79,7 +79,7 @@ export function RiskScore({ score }: { score: number }) {
 
 export function FindingCard({
   finding, index, dark, onOpen, className,
-}: { finding: Finding; index: number; dark?: boolean; onOpen: () => void; className?: string }) {
+}: { finding: Finding; index: number; dark?: boolean | undefined; onOpen: () => void; className?: string | undefined }) {
   return (
     <button
       onClick={onOpen}
