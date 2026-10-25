@@ -20,7 +20,7 @@ export const demoSite = {
   riskScore: 72,
 };
 
-export const findings: Finding[] = [
+export const findings: [Finding, Finding, Finding, Finding, Finding] = [
   {
     id: "data-sharing",
     title: "Your data can be shared with partners",
@@ -73,8 +73,9 @@ export const findings: Finding[] = [
   },
 ];
 
-export const stickyNotes = [
+export const stickyNotes: [Note, Note, Note] = [
   { id: "n1", kind: "Warning", text: "Opt-out of ad sharing lives in Settings → Privacy, not at signup." },
   { id: "n2", kind: "Reminder", text: "Cancel 7 days before renewal to avoid the next charge." },
   { id: "n3", kind: "Tip", text: "Arbitration opt-out: email within 30 days of signing up." },
 ];
+export interface Note { id: string; kind: string; text: string }
